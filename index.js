@@ -15,16 +15,19 @@ const urlDatabase = {};
 app.post('/shorten', (req, res) => {
     const longUrl = req.body.longUrl;
     console.log('Received long URL:', longUrl);
-    let shortUrl;
-    shortUrl = Math.random().toString(36).substring(2, 8);
-    urlDatabase[shortUrl] = longUrl;
+    let shortUrl = Object.keys(urlDatabase).find(key => urlDatabase[key] === longUrl);
+    if (!shortUrl) {
+        shortUrl = Math.random().toString(36).substring(2, 8);
+        urlDatabase[shortUrl] = longUrl;
 
-    res.send(`Short URL: <a href="/r/${shortUrl}">/r/${shortUrl}</a>`);
-    
+        res.send(`Short URL: <a href="/r/${shortUrl}">/r/${shortUrl}</a>`);
+    }else{
+        res.send(`Short URL: <a href="/r/${shortUrl}">/r/${shortUrl}</a>`);
+    }  
 });
 
 
-const PORT = 3001;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     
