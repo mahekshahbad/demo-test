@@ -26,8 +26,19 @@ app.post('/shorten', (req, res) => {
     }  
 });
 
+app.get('/r/:shortUrl', (req, res) => {
+    const shortUrl = req.params.shortUrl;
+    const longUrl = urlDatabase[shortUrl];
 
-const PORT = 3000;
+    if (longUrl) {
+        res.redirect(longUrl);
+    } else {
+        res.status(404).send('Short URL not found');
+    }
+});
+
+
+const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     
