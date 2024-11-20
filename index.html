@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>URL Shortener</h1>
-    <form action="/shorten" method="POST">
+    <form action="/shorten" method="POST" id="shortenForm">
         <label for="longUrl">Enter a URL to shorten:</label>
         <input type="text" id="longUrl" name="longUrl" required>
         <button type="submit">Shorten URL</button>
@@ -16,6 +16,22 @@
     <ul id="domainList"></ul>
 
     <h2>Shortened URL</h2>
+    <script>
+        document.getElementById("shortenForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent default form submission
+    
+            const longUrl = document.getElementById("longUrl").value;
+    
+            fetch("/shorten", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ longUrl })
+            })
+            .then(response => response.text())
+            .then(text => document.getElementById("shortenedUrl").innerHTML = text)
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
     <p id="shortenedUrl"></p>
 </body>
 </html>
