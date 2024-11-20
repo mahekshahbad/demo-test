@@ -10,3 +10,8 @@ This is a simple Node.js application using the Express framework.
    - npm init -y
    - npm install
    - npm install express
+
+### To run the URL Shortener application using Docker, use the following command:
+   ```
+   docker run -p 3001:3001 mahekshahbad/url-shortener:v1
+   ```
