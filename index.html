@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Shortener</title>
+</head>
+<body>
+    <h1>URL Shortener</h1>
+    <form action="/shorten" method="POST">
+        <label for="longUrl">Enter a URL to shorten:</label>
+        <input type="text" id="longUrl" name="longUrl" required>
+        <button type="submit">Shorten URL</button>
+    </form>
+
+    <h2>Top 3 Shortened Domains</h2>
+    <ul id="domainList"></ul>
+
+    <h2>Shortened URL</h2>
+    <p id="shortenedUrl"></p>
+</body>
+</html>
