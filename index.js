@@ -11,6 +11,13 @@ app.get('/', (req, res) => {
 });
 
 const urlDatabase = {};
+const domainCount = {};
+
+const getDomainName = (url) => {
+    const fullUrl = url.startsWith('http://') || url.startsWith('https://') ? url : 'http://' + url;
+    const domain = new URL(fullUrl).hostname.replace('www.', '');
+    return domain;
+};
 
 app.post('/shorten', (req, res) => {
     const longUrl = req.body.longUrl;
@@ -20,8 +27,17 @@ app.post('/shorten', (req, res) => {
         shortUrl = Math.random().toString(36).substring(2, 8);
         urlDatabase[shortUrl] = longUrl;
 
+        const domain = getDomainName(longUrl);
+        if (domainCount[domain]) {
+            domainCount[domain]++;
+        } else {
+            domainCount[domain] = 1;
+        }
+
         res.send(`Short URL: <a href="/r/${shortUrl}">/r/${shortUrl}</a>`);
     }else{
+        const domain = getDomainName(longUrl);
+        domainCount[domain]++;
         res.send(`Short URL: <a href="/r/${shortUrl}">/r/${shortUrl}</a>`);
     }  
 });
@@ -35,6 +51,21 @@ app.get('/r/:shortUrl', (req, res) => {
     } else {
         res.status(404).send('Short URL not found');
     }
+});
+
+app.get('/metrics', (req, res) => {
+    
+    const sortedDomains = Object.entries(domainCount)
+        .sort((a, b) => b[1] - a[1]) 
+        .slice(0, 3);
+
+    
+    const topDomains = sortedDomains.reduce((acc, [domain, count]) => {
+        acc[domain] = count;
+        return acc;
+    }, {});
+
+    res.json(topDomains);
 });
 
 
